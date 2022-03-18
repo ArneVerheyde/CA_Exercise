@@ -40,7 +40,7 @@ module cpu(
 
 wire              zero_flag;
 wire [      63:0] branch_pc,updated_pc,current_pc,jump_pc;
-wire [      31:0] instruction;
+wire [      31:0] instruction, instruction_IF_ID, instruction_MEM_WB;
 wire [       1:0] alu_op;
 wire [       3:0] alu_control;
 wire              reg_dst,branch,mem_read,mem_2_reg,
@@ -180,6 +180,64 @@ branch_unit#(
    .jump_pc            (jump_pc           )
 );
 
+// IF_ID Pipeline register for instruction signal
+reg_arstn_en#(
+	.DATA_W(32)
+) signal_pipe_IF_ID(
+	.clk 	(clk				),
+	.arst_n	(arst_n				),
+	.din	(instruction		),
+	.en		(enable				),
+	.d_out	)instruction_IF_ID	)
+);
+
+// ID_EX Pipeline register for instruction signal
+reg_arstn_en#(
+	.DATA_W(32)
+) signal_pipe_ID_EX(
+	.clk 	(clk				),
+	.arst_n	(arst_n				),
+	.din	(instruction		),
+	.en		(enable				),
+	.d_out	(instruction_ID_EX	)
+);
+
+// EX_MEM Pipeline register for instruction signal
+reg_arstn_en#(
+	.DATA_W(32)
+) signal_pipe_EX_MEM(
+	.clk 	(clk				),
+	.arst_n	(arst_n				),
+	.din	(instruction		),
+	.en		(enable				),
+	.d_out	)instruction_EX_MEM	)
+);
+
+// MEM_WB Pipeline register for instruction signal
+reg_arstn_en#(
+	.DATA_W(32)
+) signal_pipe_MEM_WB(
+	.clk 	(clk				),
+	.arst_n	(arst_n				),
+	.din	(instruction		),
+	.en		(enable				),
+	.d_out	)instruction_MEM_WB	)
+);
+
+// ID stage
+register_file #(
+	.DATA_W(64)
+) register_file(
+	.clk	(clk				),
+	arst_n	(arst_n				),
+	reg_write(reg_write			),
+	raddr_1	(instruction_IF_ID[19:15]),
+	raddr_2	(instruction_IF_ID[24:20]),
+	waddr	(instruction_MEM_WB[11:7]),
+	wdata	(regfile_wdata		),
+	rdata_1	(regfile_rdata_1	),
+	rdata_2	(regfile_rdata_2	)
+);
 
 endmodule
 
