@@ -40,7 +40,7 @@ module cpu(
 
 wire              zero_flag;
 wire [      63:0] branch_pc,updated_pc,current_pc,jump_pc;
-wire [      31:0] instruction, instruction_IF_ID, instruction_MEM_WB;
+wire [      31:0] instruction, instruction_IF_ID, instruction_MEM_WB, instruction_ID_EX, instruction_EX_MEM;
 wire [       1:0] alu_op;
 wire [       3:0] alu_control;
 wire              reg_dst,branch,mem_read,mem_2_reg,
@@ -72,6 +72,8 @@ pc #(
    .updated_pc(updated_pc)
 );
 
+// IF STAGE BEGIN
+
 // The instruction memory.
 sram_BW32 #(
    .ADDR_W(9 ),
@@ -90,37 +92,23 @@ sram_BW32 #(
    .rdata_ext(rdata_ext     )
 );
 
-// The data memory.
-sram_BW64 #(
-   .ADDR_W(10),
-   .DATA_W(64)
-) data_memory(
-   .clk      (clk            ),
-   .addr     (alu_out        ),
-   .wen      (mem_write      ),
-   .ren      (mem_read       ),
-   .wdata    (regfile_rdata_2),
-   .rdata    (mem_data       ),   
-   .addr_ext (addr_ext_2     ),
-   .wen_ext  (wen_ext_2      ),
-   .ren_ext  (ren_ext_2      ),
-   .wdata_ext(wdata_ext_2    ),
-   .rdata_ext(rdata_ext_2    )
-);
+//...// IF STAGE END
 
-control_unit control_unit(
-   .opcode   (instruction[6:0]),
-   .alu_op   (alu_op          ),
-   .reg_dst  (reg_dst         ),
-   .branch   (branch          ),
-   .mem_read (mem_read        ),
-   .mem_2_reg(mem_2_reg       ),
-   .mem_write(mem_write       ),
-   .alu_src  (alu_src         ),
-   .reg_write(reg_write       ),
-   .jump     (jump            )
+// IF_ID REG BEGIN
+// IF_ID Pipeline register for instruction signal
+reg_arstn_en#(
+	.DATA_W(32)
+) signal_pipe_IF_ID(
+	.clk 	(clk				),
+	.arst_n	(arst_n				),
+	.din	(instruction		),
+	.en		(enable				),
+	.d_out	)instruction_IF_ID	)
 );
+//...// IF_ID REG END
 
+
+// ID STAGE BEGIN
 register_file #(
    .DATA_W(64)
 ) register_file(
@@ -135,22 +123,35 @@ register_file #(
    .rdata_2  (regfile_rdata_2   )
 );
 
-alu_control alu_ctrl(
-   .func7          (instruction[31:25]),
-   .func3          (instruction[14:12]),
-   .alu_op         (alu_op            ),
-   .alu_control    (alu_control       )
+control_unit control_unit(
+   .opcode   (instruction[6:0]),
+   .alu_op   (alu_op          ),
+   .reg_dst  (reg_dst         ),
+   .branch   (branch          ),
+   .mem_read (mem_read        ),
+   .mem_2_reg(mem_2_reg       ),
+   .mem_write(mem_write       ),
+   .alu_src  (alu_src         ),
+   .reg_write(reg_write       ),
+   .jump     (jump            )
 );
+//...// ID STAGE END
 
-mux_2 #(
-   .DATA_W(64)
-) alu_operand_mux (
-   .input_a (immediate_extended),
-   .input_b (regfile_rdata_2    ),
-   .select_a(alu_src           ),
-   .mux_out (alu_operand_2     )
+// ID_EX REG BEGIN
+// ID_EX Pipeline register for instruction signal
+reg_arstn_en#(
+	.DATA_W(32)
+) signal_pipe_ID_EX(
+	.clk 	(clk				),
+	.arst_n	(arst_n				),
+	.din	(instruction		),
+	.en		(enable				),
+	.d_out	(instruction_ID_EX	)
 );
+//...// ID_EX REG END
 
+
+// EX STAGE BEGIN
 alu#(
    .DATA_W(64)
 ) alu(
@@ -171,37 +172,18 @@ mux_2 #(
    .mux_out  (regfile_wdata)
 );
 
-branch_unit#(
-   .DATA_W(64)
-)branch_unit(
-   .updated_pc         (updated_pc        ),
-   .immediate_extended (immediate_extended),
-   .branch_pc          (branch_pc         ),
-   .jump_pc            (jump_pc           )
+
+alu_control alu_ctrl(
+   .func7          (instruction[31:25]),
+   .func3          (instruction[14:12]),
+   .alu_op         (alu_op            ),
+   .alu_control    (alu_control       )
 );
 
-// IF_ID Pipeline register for instruction signal
-reg_arstn_en#(
-	.DATA_W(32)
-) signal_pipe_IF_ID(
-	.clk 	(clk				),
-	.arst_n	(arst_n				),
-	.din	(instruction		),
-	.en		(enable				),
-	.d_out	)instruction_IF_ID	)
-);
+//...// EX STAGE END
 
-// ID_EX Pipeline register for instruction signal
-reg_arstn_en#(
-	.DATA_W(32)
-) signal_pipe_ID_EX(
-	.clk 	(clk				),
-	.arst_n	(arst_n				),
-	.din	(instruction		),
-	.en		(enable				),
-	.d_out	(instruction_ID_EX	)
-);
 
+// EX_MEM REG BEGIN
 // EX_MEM Pipeline register for instruction signal
 reg_arstn_en#(
 	.DATA_W(32)
@@ -212,7 +194,56 @@ reg_arstn_en#(
 	.en		(enable				),
 	.d_out	)instruction_EX_MEM	)
 );
+//...// EX_MEM REG END
 
+
+// MEM STAGE BEGIN
+
+// The data memory.
+sram_BW64 #(
+   .ADDR_W(10),
+   .DATA_W(64)
+) data_memory(
+   .clk      (clk            ),
+   .addr     (alu_out        ),
+   .wen      (mem_write      ),
+   .ren      (mem_read       ),
+   .wdata    (regfile_rdata_2),
+   .rdata    (mem_data       ),   
+   .addr_ext (addr_ext_2     ),
+   .wen_ext  (wen_ext_2      ),
+   .ren_ext  (ren_ext_2      ),
+   .wdata_ext(wdata_ext_2    ),
+   .rdata_ext(rdata_ext_2    )
+);
+
+
+branch_unit#(
+   .DATA_W(64)
+)branch_unit(
+   .updated_pc         (updated_pc        ),
+   .immediate_extended (immediate_extended),
+   .branch_pc          (branch_pc         ),
+   .jump_pc            (jump_pc           )
+);
+//...// MEM STAGE END
+
+
+
+
+// WB STAGE BEGIN
+mux_2 #(
+   .DATA_W(64)
+) alu_operand_mux (
+   .input_a (immediate_extended),
+   .input_b (regfile_rdata_2    ),
+   .select_a(alu_src           ),
+   .mux_out (alu_operand_2     )
+);
+//...// WB STAGE END
+
+
+// MEM_WB REG BEGIN
 // MEM_WB Pipeline register for instruction signal
 reg_arstn_en#(
 	.DATA_W(32)
@@ -223,22 +254,33 @@ reg_arstn_en#(
 	.en		(enable				),
 	.d_out	)instruction_MEM_WB	)
 );
+//...// MEM_WB REG END
 
-// ID stage
-register_file #(
-	.DATA_W(64)
-) register_file(
-	.clk	(clk				),
-	arst_n	(arst_n				),
-	reg_write(reg_write			),
-	raddr_1	(instruction_IF_ID[19:15]),
-	raddr_2	(instruction_IF_ID[24:20]),
-	waddr	(instruction_MEM_WB[11:7]),
-	wdata	(regfile_wdata		),
-	rdata_1	(regfile_rdata_1	),
-	rdata_2	(regfile_rdata_2	)
-);
+
 
 endmodule
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
