@@ -109,7 +109,7 @@ reg_arstn_en#(
 
 
 // ID STAGE BEGIN
-wire [      31:0] instruction, instruction_IF_ID, instruction_ID_EX, instruction_MEM_WB;
+wire [      31:0] instruction_IF_ID, instruction_ID_EX, instruction_MEM_WB;
 
 
 register_file #(
@@ -155,6 +155,7 @@ reg_arstn_en#(
 
 
 // EX STAGE BEGIN
+wire [      31:0] instruction_EX_MEM, instruction_MEM_WB;
 alu#(
    .DATA_W(64)
 ) alu(
@@ -201,7 +202,7 @@ reg_arstn_en#(
 
 
 // MEM STAGE BEGIN
-
+wire [      31:0] instruction_EX_MEM, instruction_MEM_WB, instruction_IF_ID;
 // The data memory.
 sram_BW64 #(
    .ADDR_W(10),
@@ -246,6 +247,7 @@ reg_arstn_en#(
 
 
 // WB STAGE BEGIN
+wire [      31:0] instruction_MEM_WB, instruction;
 mux_2 #(
    .DATA_W(64)
 ) alu_operand_mux (
@@ -264,7 +266,7 @@ reg_arstn_en#(
 ) signal_pipe_MEM_WB(
 	.clk 	(clk				),
 	.arst_n	(arst_n				),
-	.din	(instruction_EX_MEM		),
+	.din	(instruction_MEM_WB		),
 	.en		(enable				),
 	.d_out	(instruction	)
 );
