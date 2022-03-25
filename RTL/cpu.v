@@ -57,6 +57,10 @@ immediate_extend_unit immediate_extend_u(
     .immediate_extended  (immediate_extended)
 );
 
+
+// IF STAGE BEGIN
+wire [      31:0] instruction, instruction_IF_ID, instruction_MEM_WB;
+
 pc #(
    .DATA_W(64)
 ) program_counter (
@@ -72,8 +76,6 @@ pc #(
    .updated_pc(updated_pc)
 );
 
-// IF STAGE BEGIN
-wire [      31:0] instruction, instruction_IF_ID, instruction_MEM_WB;
 // The instruction memory.
 sram_BW32 #(
    .ADDR_W(9 ),
