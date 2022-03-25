@@ -73,7 +73,7 @@ pc #(
 );
 
 // IF STAGE BEGIN
-
+wire [      31:0] instruction, instruction_IF_ID, instruction_MEM_WB;
 // The instruction memory.
 sram_BW32 #(
    .ADDR_W(9 ),
@@ -103,28 +103,31 @@ reg_arstn_en#(
 	.arst_n	(arst_n				),
 	.din	(instruction		),
 	.en		(enable				),
-	.d_out	)instruction_IF_ID	)
+	.d_out	(instruction_IF_ID	)
 );
 //...// IF_ID REG END
 
 
 // ID STAGE BEGIN
+wire [      31:0] instruction, instruction_IF_ID, instruction_ID_EX, instruction_MEM_WB;
+
+
 register_file #(
    .DATA_W(64)
 ) register_file(
    .clk      (clk               ),
    .arst_n   (arst_n            ),
    .reg_write(reg_write         ),
-   .raddr_1  (instruction[19:15]),
-   .raddr_2  (instruction[24:20]),
-   .waddr    (instruction[11:7] ),
+   .raddr_1  (instruction_IF_ID[19:15]),
+   .raddr_2  (instruction_IF_ID[24:20]),
+   .waddr    (instruction_MEM_WB[11:7] ),
    .wdata    (regfile_wdata     ),
    .rdata_1  (regfile_rdata_1   ),
    .rdata_2  (regfile_rdata_2   )
 );
 
 control_unit control_unit(
-   .opcode   (instruction[6:0]),
+   .opcode   (instruction_IF_ID[6:0]),
    .alu_op   (alu_op          ),
    .reg_dst  (reg_dst         ),
    .branch   (branch          ),
@@ -144,7 +147,7 @@ reg_arstn_en#(
 ) signal_pipe_ID_EX(
 	.clk 	(clk				),
 	.arst_n	(arst_n				),
-	.din	(instruction		),
+	.din	(instruction_IF_ID		),
 	.en		(enable				),
 	.d_out	(instruction_ID_EX	)
 );
@@ -174,8 +177,8 @@ mux_2 #(
 
 
 alu_control alu_ctrl(
-   .func7          (instruction[31:25]),
-   .func3          (instruction[14:12]),
+   .func7          (instruction_ID_EX[31:25]),
+   .func3          (instruction_ID_EX[14:12]),
    .alu_op         (alu_op            ),
    .alu_control    (alu_control       )
 );
@@ -190,9 +193,9 @@ reg_arstn_en#(
 ) signal_pipe_EX_MEM(
 	.clk 	(clk				),
 	.arst_n	(arst_n				),
-	.din	(instruction		),
+	.din	(instruction_ID_EX		),
 	.en		(enable				),
-	.d_out	)instruction_EX_MEM	)
+	.d_out	(instruction_EX_MEM	)
 );
 //...// EX_MEM REG END
 
@@ -228,7 +231,18 @@ branch_unit#(
 );
 //...// MEM STAGE END
 
-
+// EX_MEM REG BEGIN
+// EX_MEM Pipeline register for instruction signal
+reg_arstn_en#(
+	.DATA_W(32)
+) signal_pipe_MEM_WB(
+	.clk 	(clk				),
+	.arst_n	(arst_n				),
+	.din	(instruction_EX_MEM		),
+	.en		(enable				),
+	.d_out	(instruction_MEM_WB	)
+);
+//...// EX_MEM REG END
 
 
 // WB STAGE BEGIN
@@ -250,9 +264,9 @@ reg_arstn_en#(
 ) signal_pipe_MEM_WB(
 	.clk 	(clk				),
 	.arst_n	(arst_n				),
-	.din	(instruction		),
+	.din	(instruction_EX_MEM		),
 	.en		(enable				),
-	.d_out	)instruction_MEM_WB	)
+	.d_out	(instruction	)
 );
 //...// MEM_WB REG END
 
