@@ -1,5 +1,5 @@
 ncverilog(64): 15.20-s058: (c) Copyright 1995-2018 Cadence Design Systems, Inc.
-TOOL:	ncverilog	15.20-s058: Started on Mar 17, 2022 at 17:54:10 CET
+TOOL:	ncverilog	15.20-s058: Started on Apr 12, 2022 at 20:44:32 CEST
 ncverilog
 	+sv
 	-f files_verilog.f
@@ -21,208 +21,47 @@ ncverilog
 	+nctimescale+1ns/10ps
 	+access+rwc
 	-ALLOWREDEFINITION
-Recompiling... reason: file '../RTL/alu.v' is newer than expected.
-	expected: Thu Mar 17 17:26:56 2022
-	actual:   Thu Mar 17 17:54:03 2022
-file: ../RTL/alu.v
-	module worklib.alu:v
-		errors: 0, warnings: 0
-file: ../RTL/alu_control.v
-	module worklib.alu_control:v
-		errors: 0, warnings: 0
-file: ../RTL/saed32sram_mod.v
-`define numAddr 7
-                 |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,101|17): text macro 'numAddr' redefined - replaced with new definition.
-`define numWords 128
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,102|20): text macro 'numWords' redefined - replaced with new definition.
-`define wordLength 46
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,103|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 48
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,229|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 8
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,357|20): text macro 'wordLength' redefined - replaced with new definition.
-`define numAddr 8
-                 |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,443|17): text macro 'numAddr' redefined - replaced with new definition.
-`define numWords 256
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,444|20): text macro 'numWords' redefined - replaced with new definition.
-`define wordLength 128
-                      |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,445|22): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 32
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,653|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 46
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,765|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 48
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,891|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 8
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1019|20): text macro 'wordLength' redefined - replaced with new definition.
-`define numAddr 5
-                 |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1105|17): text macro 'numAddr' redefined - replaced with new definition.
-`define numWords 32
-                   |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1106|19): text macro 'numWords' redefined - replaced with new definition.
-`define wordLength 50
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1107|21): text macro 'wordLength' redefined - replaced with new definition.
-`define numAddr 9
-                 |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1235|17): text macro 'numAddr' redefined - replaced with new definition.
-`define numWords 512
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1236|20): text macro 'numWords' redefined - replaced with new definition.
-`define wordLength 128
-                      |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1237|22): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 32
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1445|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 8
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1557|20): text macro 'wordLength' redefined - replaced with new definition.
-`define numAddr 6
-                 |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1643|17): text macro 'numAddr' redefined - replaced with new definition.
-`define numWords 64
-                   |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1644|19): text macro 'numWords' redefined - replaced with new definition.
-`define wordLength 128
-                      |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1645|22): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 32
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1853|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 34
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,1965|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 8
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2079|20): text macro 'wordLength' redefined - replaced with new definition.
-`define numAddr 7
-                 |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2165|17): text macro 'numAddr' redefined - replaced with new definition.
-`define numWords 128
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2166|20): text macro 'numWords' redefined - replaced with new definition.
-`define wordLength 16
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2167|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 32
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2288|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 4
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2425|20): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 8
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2534|20): text macro 'wordLength' redefined - replaced with new definition.
-`define numAddr 4
-                 |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2645|17): text macro 'numAddr' redefined - replaced with new definition.
-`define numWords 16
-                   |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2646|19): text macro 'numWords' redefined - replaced with new definition.
-`define wordLength 16
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2647|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 32
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2768|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 4
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,2905|20): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 8
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3014|20): text macro 'wordLength' redefined - replaced with new definition.
-`define numAddr 5
-                 |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3125|17): text macro 'numAddr' redefined - replaced with new definition.
-`define numWords 32
-                   |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3126|19): text macro 'numWords' redefined - replaced with new definition.
-`define wordLength 16
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3127|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 22
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3248|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 32
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3375|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 39
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3512|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 4
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3656|20): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 8
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3765|20): text macro 'wordLength' redefined - replaced with new definition.
-`define numAddr 6
-                 |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3876|17): text macro 'numAddr' redefined - replaced with new definition.
-`define numWords 64
-                   |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3877|19): text macro 'numWords' redefined - replaced with new definition.
-`define wordLength 16
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3878|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 32
-                     |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,3999|21): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 4
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,4136|20): text macro 'wordLength' redefined - replaced with new definition.
-`define wordLength 8
-                    |
-ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,4245|20): text macro 'wordLength' redefined - replaced with new definition.
-	Total errors/warnings found outside modules and primitives:
-		errors: 0, warnings: 52
-		Caching library 'worklib' ....... Done
-	Elaborating the design hierarchy:
-ncelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
-	Building instance overlay tables: .................... Done
-	Generating native compiled code:
-		worklib.alu:v <0x73904250>
-			streams:   6, words:  5204
-		worklib.alu_control:v <0x385dad51>
-			streams:   3, words:   969
-	Building instance specific data structures.
-	Loading native compiled code:     .................... Done
-	Design hierarchy summary:
-		                   Instances  Unique
-		Modules:                1772      84
-		Primitives:             5220       1
-		Registers:              7016     233
-		Scalar wires:          12297       -
-		Expanded wires:         1280      40
-		Vectored wires:          130       -
-		Always blocks:          6606     190
-		Initial blocks:            3       3
-		Cont. assignments:         2       5
-		Pseudo assignments:     5411     155
-		Simulation timescale:  100fs
-	Writing initial simulation snapshot: worklib.reg_arstn:v
 Loading snapshot worklib.reg_arstn:v .................... Done
 ncsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
 ncsim> source /esat/micas-data/software/Cadence/incisiv_15.20.058/tools/inca/files/ncsimrc
 ncsim> run
-[1;34m
-Mult2 Working Correctly
+[1;31m
+Error in Mult2 function
 [0m
+Debug info, reg_array[          0]: 0000000000000000
+Debug info, reg_array[          1]: 0000000000000000
+Debug info, reg_array[          2]: 0000000000000000
+Debug info, reg_array[          3]: 0000000000000000
+Debug info, reg_array[          4]: 0000000000000000
+Debug info, reg_array[          5]: 0000000000000000
+Debug info, reg_array[          6]: 0000000000000000
+Debug info, reg_array[          7]: 0000000000000000
+Debug info, reg_array[          8]: 0000000000000000
+Debug info, reg_array[          9]: 0000000000000008
+Debug info, reg_array[         10]: 0000000000000010
+Debug info, reg_array[         11]: 0000000000000018
+Debug info, reg_array[         12]: 0000000000000020
+Debug info, reg_array[         13]: 0000000000000028
+Debug info, reg_array[         14]: 0000000000000030
+Debug info, reg_array[         15]: 0000000000000038
+Debug info, reg_array[         16]: 0000000000000040
+Debug info, reg_array[         17]: 0000000000000048
+Debug info, reg_array[         18]: 0000000000000000
+Debug info, reg_array[         19]: 0000000000000180
+Debug info, reg_array[         20]: 0000000000000500
+Debug info, reg_array[         21]: 0000000000000a80
+Debug info, reg_array[         22]: 0000000000001200
+Debug info, reg_array[         23]: 0000000000002300
+Debug info, reg_array[         24]: 0000000000000000
+Debug info, reg_array[         25]: 0000000000000000
+Debug info, reg_array[         26]: 0000000000000000
+Debug info, reg_array[         27]: 0000000000000000
+Debug info, reg_array[         28]: 0000000000000000
+Debug info, reg_array[         29]: 0000000000000000
+Debug info, reg_array[         30]: 0000000000000000
+Debug info, reg_array[         31]: 0000000000000000
          40 cycles
 Simulation complete via $finish(1) at time 160450 NS + 7
 ../RTL/cpu_tb.v:319    $finish;
 ncsim> exit
-TOOL:	ncverilog	15.20-s058: Exiting on Mar 17, 2022 at 17:54:11 CET  (total: 00:00:01)
+TOOL:	ncverilog	15.20-s058: Exiting on Apr 12, 2022 at 20:44:33 CEST  (total: 00:00:01)
