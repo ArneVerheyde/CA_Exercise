@@ -3,6 +3,8 @@
 // Do not modify this file
 //
 /users/students/r0875167/CA/current/RTL/alu.v
+/users/students/r0875167/CA/current/RTL/mux_3.v
+/users/students/r0875167/CA/current/RTL/forward_unit.v
 /users/students/r0875167/CA/current/RTL/alu_control.v
 /users/students/r0875167/CA/current/RTL/branch_unit.v
 /users/students/r0875167/CA/current/RTL/control_unit.v

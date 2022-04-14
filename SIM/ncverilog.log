@@ -1,9 +1,11 @@
 ncverilog(64): 15.20-s058: (c) Copyright 1995-2018 Cadence Design Systems, Inc.
-TOOL:	ncverilog	15.20-s058: Started on Apr 13, 2022 at 15:24:14 CEST
+TOOL:	ncverilog	15.20-s058: Started on Apr 14, 2022 at 14:37:00 CEST
 ncverilog
 	+sv
 	-f files_verilog.f
 		../RTL/alu.v
+		../RTL/mux_3.v
+		../RTL/forward_unit.v
 		../RTL/alu_control.v
 		../RTL/branch_unit.v
 		../RTL/control_unit.v
@@ -23,6 +25,12 @@ ncverilog
 	-ALLOWREDEFINITION
 file: ../RTL/alu.v
 	module worklib.alu:v
+		errors: 0, warnings: 0
+file: ../RTL/mux_3.v
+	module worklib.mux_3:v
+		errors: 0, warnings: 0
+file: ../RTL/forward_unit.v
+	module worklib.forward_unit:v
 		errors: 0, warnings: 0
 file: ../RTL/alu_control.v
 	module worklib.alu_control:v
@@ -364,18 +372,6 @@ ncvlog: *W,MACRDF (../RTL/saed32sram_mod.v,4245|20): text macro 'wordLength' red
 		Caching library 'worklib' ....... Done
 	Elaborating the design hierarchy:
 ncelab: *W,DSEMEL: This SystemVerilog design will be simulated as per IEEE 1800-2009 SystemVerilog simulation semantics. Use -disable_sem2009 option for turning off SV 2009 simulation semantics.
-	.din	(updated_pc	),
-	    	          |
-ncelab: *W,CUVMPW (../RTL/cpu.v,127|16): port sizes differ in port connection (64/32).
-	.din	(updated_pc_IF_ID),
-	    	                |
-ncelab: *W,CUVMPW (../RTL/cpu.v,228|22): port sizes differ in port connection (32/64).
-	.din	(mem_read_ID_EX		),
-	    	              |
-ncelab: *W,CUVMPW (../RTL/cpu.v,377|20): port sizes differ in port connection (1/32).
-	.dout	(mem_read_EX_MEM	)
-	     	               |
-ncelab: *W,CUVMPW (../RTL/cpu.v,379|22): port sizes differ in port connection (1/32).
 	Building instance overlay tables: .................... Done
 	Generating native compiled code:
 		worklib.SRAM1RW1024x8_1bit:v <0x3b3e5c15>
@@ -450,42 +446,36 @@ ncelab: *W,CUVMPW (../RTL/cpu.v,379|22): port sizes differ in port connection (1
 			streams:  10, words:  2552
 		worklib.alu:v <0x73904250>
 			streams:   6, words:  5204
-		worklib.alu_control:v <0x09498632>
-			streams:   3, words:  1085
+		worklib.alu_control:v <0x385dad51>
+			streams:   3, words:   969
 		worklib.branch_unit:v <0x7b2dad56>
 			streams:   1, words:   490
 		worklib.control_unit:v <0x1b325f5f>
 			streams:   1, words:  4728
-		worklib.cpu:v <0x36724481>
-			streams:   9, words:  1204
-		worklib.cpu_tb:v <0x25bfa323>
+		worklib.cpu:v <0x6f10194b>
+			streams:  12, words:  1664
+		worklib.cpu_tb:v <0x340503d7>
 			streams:  27, words: 53186
+		worklib.forward_unit:v <0x4a48e3eb>
+			streams:   1, words:  1174
 		worklib.immediate_extend_unit:v <0x013d814d>
 			streams:   2, words:  3075
 		worklib.mux_2:v <0x69a21794>
 			streams:   1, words:   432
-		worklib.pc:v <0x11c47915>
-			streams:   5, words:  1750
+		worklib.mux_3:v <0x137b9197>
+			streams:   2, words:  1063
+		worklib.pc:v <0x64f655be>
+			streams:   5, words:  1517
 		worklib.reg_arstn:v <0x3ac60968>
 			streams:   3, words:   647
-		worklib.reg_arstn_en:v <0x03e878ce>
-			streams:   3, words:   919
-		worklib.reg_arstn_en:v <0x0c7e500d>
-			streams:   3, words:  1163
 		worklib.reg_arstn_en:v <0x0fea182b>
 			streams:   3, words:   802
 		worklib.reg_arstn_en:v <0x1a7eb253>
 			streams:   3, words:  1033
-		worklib.reg_arstn_en:v <0x600085e1>
-			streams:   3, words:   916
 		worklib.reg_arstn_en:v <0x697a0079>
 			streams:   3, words:   774
 		worklib.reg_arstn_en:v <0x709fd245>
 			streams:   3, words:   787
-		worklib.reg_arstn_en:v <0x75c7abf0>
-			streams:   4, words:  1034
-		worklib.reg_arstn_en:v <0x7f7ae227>
-			streams:   3, words:   841
 		worklib.register_file:v <0x7a425b1b>
 			streams:   5, words: 28015
 		worklib.sram_BW32:v <0x248c010f>
@@ -496,16 +486,16 @@ ncelab: *W,CUVMPW (../RTL/cpu.v,379|22): port sizes differ in port connection (1
 	Loading native compiled code:     .................... Done
 	Design hierarchy summary:
 		                   Instances  Unique
-		Modules:                1803      84
+		Modules:                1805      86
 		Primitives:             5220       1
-		Registers:              7078     233
-		Scalar wires:          12390       -
-		Expanded wires:         1423      45
-		Vectored wires:          144       -
-		Always blocks:          6668     190
+		Registers:              7080     236
+		Scalar wires:          12311       -
+		Expanded wires:         1280      40
+		Vectored wires:          155       -
+		Always blocks:          6669     192
 		Initial blocks:            3       3
-		Cont. assignments:         4       5
-		Pseudo assignments:     5411     155
+		Cont. assignments:         2       5
+		Pseudo assignments:     5414     158
 		Simulation timescale:  100fs
 	Writing initial simulation snapshot: worklib.reg_arstn:v
 Loading snapshot worklib.reg_arstn:v .................... Done
@@ -513,10 +503,10 @@ ncsim: *W,DSEM2009: This SystemVerilog design is simulated as per IEEE 1800-2009
 ncsim> source /esat/micas-data/software/Cadence/incisiv_15.20.058/tools/inca/files/ncsimrc
 ncsim> run
 [1;34m
-Mult2 Working Correctly
+Mult3 Working Correctly
 [0m
-         40 cycles
-Simulation complete via $finish(1) at time 160450 NS + 7
+         25 cycles
+Simulation complete via $finish(1) at time 158950 NS + 7
 ../RTL/cpu_tb.v:319    $finish;
 ncsim> exit
-TOOL:	ncverilog	15.20-s058: Exiting on Apr 13, 2022 at 15:24:17 CEST  (total: 00:00:03)
+TOOL:	ncverilog	15.20-s058: Exiting on Apr 14, 2022 at 14:37:01 CEST  (total: 00:00:01)

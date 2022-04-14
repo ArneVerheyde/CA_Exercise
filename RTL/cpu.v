@@ -50,7 +50,8 @@ wire [      63:0] regfile_wdata,mem_data,alu_out,
                   regfile_rdata_1,regfile_rdata_2,
                   alu_operand_2;
 
-wire [31:0] instruction_IF_ID, updated_pc_IF_ID;
+wire [31:0] instruction_IF_ID;
+wire [63:0] updated_pc_IF_ID;
 
 wire [31:0] instruction_ID_EX;
 wire reg_write_ID_EX, branch_ID_EX, alu_src_ID_EX, mem_read_ID_EX, mem_2_reg_ID_EX, mem_write_ID_EX;
@@ -120,7 +121,7 @@ reg_arstn_en#(
 	.dout	(instruction_IF_ID		)
 );
 
-reg_arstn_en#(.DATA_W(32))
+reg_arstn_en#(.DATA_W(64))
 	updated_pc_pipe_IF_ID(
 	.clk	(clk		),
 	.arst_n	(arst_n		),
@@ -171,23 +172,13 @@ immediate_extend_unit immediate_extend_u(
 // ID_EX Pipeline register for instruction signal
 
 
-reg_arstn_en#(.DATA_W(7))
-	instr_func7_pipe_ID_EX(
-	.clk	(clk		),
-	.arst_n	(arst_n		),
-	.din	(instruction_IF_ID[31:25]),
-	.en	(enable		),
-	.dout	(instruction_ID_EX[31:25])
-
-);
-
-reg_arstn_en#(.DATA_W(8))
+reg_arstn_en#(.DATA_W(32))
 	instruction_pipe_ID_EX(
 	.clk	(clk		),
 	.arst_n	(arst_n		),
-	.din	(instruction_IF_ID[14:7]),
+	.din	(instruction_IF_ID),
 	.en	(enable		),
-	.dout	(instruction_ID_EX[14:7])
+	.dout	(instruction_ID_EX)
 
 );
 
@@ -307,10 +298,46 @@ reg_arstn_en#(
 
 
 // EX STAGE BEGIN
+
+wire [63:0] alu_operand_1, op2_mux_out;
+wire [1:0]  select_op1, select_op2;
+mux_3 #(
+	.DATA_W(64)
+) op1_mux(
+	.input_a(regfile_rdata_1_ID_EX),
+	.input_b(regfile_wdata),
+	.input_c(alu_out_EX_MEM),
+	.select(select_op1),
+	.mux_out(alu_operand_1)
+);
+
+mux_3 #(
+	.DATA_W(64)
+) op2_mux(
+	.input_a(regfile_rdata_2_ID_EX),
+	.input_b(regfile_wdata),
+	.input_c(alu_out_EX_MEM),
+	.select(select_op2),
+	.mux_out(op2_mux_out)
+);
+
+forward_unit #(
+		.DATA_W(5)
+) forwarding_unit(
+	.rs1(instruction_ID_EX[19:15]),
+	.rs2(instruction_ID_EX[24:20]),
+	.rd_EX_MEM(instruction_EX_MEM[11:7]),
+	.rd_MEM_WB(instruction_MEM_WB[11:7]),
+	.reg_write_EX_MEM(reg_write_EX_MEM),
+	.reg_write_MEM_WB(reg_write_MEM_WB),
+	.op1_sel(select_op1),
+	.op2_sel(select_op2)
+);
+
 alu#(
    .DATA_W(64)
 ) alu(
-   .alu_in_0 (regfile_rdata_1_ID_EX ),
+   .alu_in_0 (alu_operand_1   ),
    .alu_in_1 (alu_operand_2   ),
    .alu_ctrl (alu_control     ),
    .alu_out  (alu_out         ),
@@ -322,7 +349,7 @@ mux_2 #(
    .DATA_W(64)
 ) alu_operand_mux (
    .input_a (immediate_extended_ID_EX),
-   .input_b (regfile_rdata_2_ID_EX    ),
+   .input_b (op2_mux_out	    ),
    .select_a(alu_src_ID_EX           ),
    .mux_out (alu_operand_2     )
 );
@@ -370,7 +397,7 @@ reg_arstn_en#(
 );
 
 reg_arstn_en#(
-	.DATA_W(32)
+	.DATA_W(1)
 ) mem_read_pipe_EX_MEM(
 	.clk 	(clk				),
 	.arst_n	(arst_n				),
